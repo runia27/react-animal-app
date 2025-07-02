@@ -1,13 +1,12 @@
 import React from 'react';
 
-
-const AnimalForm = ({ IncrementNum, animals, setNum, setAnimalList }) => {
+const AnimalForm = ({ IncrementNum, setNum, setAnimalList, setText }) => {
   const [value, setValue] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
 
   const hangul = (text) => /[가-힣|ㄱ-ㅎ|ㅏ-ㅣ]/.test(text);
 
-  const handleInputChange = text => {
+  const handleInputChange = (text) => {
     const inputText = text.target.value;
 
     setValue(inputText.toUpperCase());
@@ -17,7 +16,7 @@ const AnimalForm = ({ IncrementNum, animals, setNum, setAnimalList }) => {
     } else {
       setErrorMessage("");
     }
-  }
+  };
 
   const buttonClick = (event) => {
     event.preventDefault();
@@ -26,12 +25,13 @@ const AnimalForm = ({ IncrementNum, animals, setNum, setAnimalList }) => {
       setErrorMessage('빈칸은 입력할 수 없습니다.');
     } else {
       setErrorMessage("");
-      IncrementNum()
+      setText(value);          
+      IncrementNum();          
     }
-  }
+  };
 
   return (
-    < form>
+    <form>
       <input
         type="text"
         name="name"
@@ -48,18 +48,15 @@ const AnimalForm = ({ IncrementNum, animals, setNum, setAnimalList }) => {
           localStorage.clear();
           alert("로컬스토리지가 초기화되었습니다!");
           setNum(1);
-          setAnimalList(animals);
+          setAnimalList([]);
         }
       }}>
         초기화
       </button>
 
-      <p
-        style={{
-          color: "#f00",
-        }}>{errorMessage}</p>
-    </form >
+      <p style={{ color: "#f00" }}>{errorMessage}</p>
+    </form>
   );
-}
+};
 
 export default AnimalForm;

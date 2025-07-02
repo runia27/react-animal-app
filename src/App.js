@@ -2,7 +2,7 @@ import './App.css';
 import React from 'react';
 import Title from './components/Title';
 import AnimalForm from './components/AnimalForm';
-import Main_card from './components/MainCard';
+import MainCard from './components/MainCard';
 import Favorites from './components/Favorites';
 
 
@@ -15,43 +15,39 @@ const jsonLocalStorage = {
   },
 };
 
-const animals = [
-  { title: "귀여운 곰돌이", src: "img/bear.png", alt: "bear" },
-  { title: "귀여운 코끼리", src: "img/elephant.png", alt: "elephant" },
-  { title: "귀여운 여우", src: "img/fox.png", alt: "fox" },
-  { title: "귀여운 토끼", src: "img/rabbit.png", alt: "rabbit" }
-];
-
 
 const App = () => {
   const [num, setNum] = React.useState(() => jsonLocalStorage.getItem('num') || 1);
-  const [mainAnimal, setMainAnimal] = React.useState(0);
-  const [animalList, setAnimalList] = React.useState(() => jsonLocalStorage.getItem('animalList') || [])
+  const [catUrl, setCatUrl] = React.useState('');
+  const [animalList, setAnimalList] = React.useState(() => jsonLocalStorage.getItem('animalList') || []);
+  const [text, setText] = React.useState('');  
 
   const IncrementNum = () => {
-
-    setNum((pre) => {
-      const nextNum = pre + 1
-      return nextNum;
-    })
-
-    setMainAnimal((mainAnimal + 1) % animals.length);
-  }
-
-  const buttonHeart = () => {
-
-    const currentAnimal = animals[mainAnimal];
-
-    setAnimalList(prevList => [...prevList, currentAnimal]);
-    setMainAnimal((prevMain) => (prevMain + 1) % animals.length);
+    setNum(prev => prev + 1);
   };
 
-  const choiceFavorite = animalList.some(
-    (animal) =>
-      animal.title === animals[mainAnimal].title &&
-      animal.src === animals[mainAnimal].src &&
-      animal.alt === animals[mainAnimal].alt
-  );
+  const buttonHeart = () => {
+    const currentCat = { catUrl: catUrl, text: text };
+    setAnimalList(prevList => [...prevList, currentCat]);
+  };
+
+  React.useEffect(() => {
+    console.log('useEffect fetch 호출');
+    const textForUrl = text ? encodeURIComponent(text) : '';
+    const url = textForUrl
+      ? `https://cataas.com/cat/says/${textForUrl}?json=true`
+      : `https://cataas.com/cat?json=true`;
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        const fullUrl = data.url.startsWith('http')
+          ? data.url
+          : `https://cataas.com${data.url}`;
+        setCatUrl(fullUrl);
+      })
+      .catch(err => console.error('고양이 이미지 로드 실패:', err));
+  }, [num, text]);  
 
   React.useEffect(() => {
     jsonLocalStorage.setItem("num", num);
@@ -64,11 +60,12 @@ const App = () => {
   return (
     <div>
       <Title>{num}페이지</Title>
-      <AnimalForm IncrementNum={IncrementNum} AnimalForm animals={animals} setNum={setNum} setAnimalList={setAnimalList} />
-      <Main_card src={animals[mainAnimal].src} alt={animals[mainAnimal].src} buttonHeart={buttonHeart} choiceFavorite={choiceFavorite} />
+      <AnimalForm IncrementNum={IncrementNum} setText={setText} /> 
+      <MainCard catUrl={catUrl} buttonHeart={buttonHeart} choiceFavorite={animalList.some(a => a.catUrl === catUrl)} />
       <Favorites animalList={animalList} />
     </div>
   );
-}
+};
+
 
 export default App;

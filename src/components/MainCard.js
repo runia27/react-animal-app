@@ -1,12 +1,12 @@
-const Main_card = ({ src, alt, buttonHeart, choiceFavorite }) => {
+const MainCard = ({ catUrl, buttonHeart, choiceFavorite }) => {
   const heartIcon = choiceFavorite ? '😎' : '😍';
 
   return (
     <div className="main-card">
-      <img src={`${process.env.PUBLIC_URL}/${src}`} alt={alt} width="400px" />
+      {catUrl && <img src={catUrl} alt="고양이" width="400px" />}
       <button onClick={buttonHeart}>{heartIcon}</button>
-    </div >
+    </div>
   );
-}
+};
 
-export default Main_card;
+export default MainCard;
