@@ -1,0 +1,13 @@
+.maincard button {
+  position: relative;
+  left: -45px;
+  top: -12px;
+}
+
+.maincard img {
+  width: 400px;
+  height: 400px;
+  border-radius: 10px;
+  object-fit: cover;
+  margin: 0 auto;
+}

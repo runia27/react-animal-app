@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-align: center;
 }
 
 code {
@@ -12,29 +13,3 @@ code {
     monospace;
 }
 
-
-body {
-  text-align: center;
-}
-
-form {
-  margin-bottom: 20px;
-}
-
-.main-card button {
-  position: relative;
-  left: -45px;
-  top: -12px;
-}
-
-.favorites {
-  list-style: none;
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  flex-wrap: wrap;
-}
-
-.favorites img {
-  width: 150px;
-}

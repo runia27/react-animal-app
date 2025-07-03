@@ -1,19 +1,9 @@
-import './App.css';
 import React from 'react';
-import Title from './components/Title';
-import AnimalForm from './components/AnimalForm';
-import MainCard from './components/MainCard';
-import Favorites from './components/Favorites';
-
-
-const jsonLocalStorage = {
-  setItem: (key, value) => {
-    localStorage.setItem(key, JSON.stringify(value));
-  },
-  getItem: (key) => {
-    return JSON.parse(localStorage.getItem(key))
-  },
-};
+import Title from './components/Title/Title';
+import AnimalForm from './components/Animalform/AnimalForm';
+import Maincard from './components/Maincard/Maincard';
+import Favorites from './components/Favorites/Favorites';
+import jsonLocalStorage from './utils/jsonLocalStorage';
 
 
 const App = () => {
@@ -27,15 +17,21 @@ const App = () => {
   };
 
   const buttonHeart = () => {
+
+    if (animalList.some(animal => animal.catUrl === catUrl)) {
+      alert('이미 추가된 이미지입니다.');
+      return;
+    }
+
     const currentCat = { catUrl: catUrl, text: text };
     setAnimalList(prevList => [...prevList, currentCat]);
   };
 
-  React.useEffect(() => {    
+  React.useEffect(() => {
     const textForUrl = text ? encodeURIComponent(text) : '';
     const url = textForUrl
       ? `https://cataas.com/cat/says/${textForUrl}?width=400&height=400&fontColor=yellow&json=true`
-      : `https://cataas.com/cat/says/haha?width=400&height=400&fontColor=yellow&json=true`;
+      : `https://cataas.com/cat/says/HAHA?width=400&height=400&fontColor=yellow&json=true`;
 
     fetch(url)
       .then(response => response.json())
@@ -60,7 +56,7 @@ const App = () => {
     <div>
       <Title>{num}페이지</Title>
       <AnimalForm IncrementNum={IncrementNum} setText={setText} />
-      <MainCard catUrl={catUrl} buttonHeart={buttonHeart} choiceFavorite={animalList.some(a => a.catUrl === catUrl)} />
+      <Maincard catUrl={catUrl} buttonHeart={buttonHeart} choiceFavorite={animalList.some(a => a.catUrl === catUrl)} />
       <Favorites animalList={animalList} />
     </div>
   );
