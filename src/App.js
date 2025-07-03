@@ -20,7 +20,7 @@ const App = () => {
   const [num, setNum] = React.useState(() => jsonLocalStorage.getItem('num') || 1);
   const [catUrl, setCatUrl] = React.useState('');
   const [animalList, setAnimalList] = React.useState(() => jsonLocalStorage.getItem('animalList') || []);
-  const [text, setText] = React.useState('');  
+  const [text, setText] = React.useState('');
 
   const IncrementNum = () => {
     setNum(prev => prev + 1);
@@ -31,12 +31,11 @@ const App = () => {
     setAnimalList(prevList => [...prevList, currentCat]);
   };
 
-  React.useEffect(() => {
-    console.log('useEffect fetch 호출');
+  React.useEffect(() => {    
     const textForUrl = text ? encodeURIComponent(text) : '';
     const url = textForUrl
-      ? `https://cataas.com/cat/says/${textForUrl}?json=true`
-      : `https://cataas.com/cat?json=true`;
+      ? `https://cataas.com/cat/says/${textForUrl}?width=400&height=400&fontColor=yellow&json=true`
+      : `https://cataas.com/cat/says/haha?width=400&height=400&fontColor=yellow&json=true`;
 
     fetch(url)
       .then(response => response.json())
@@ -47,7 +46,7 @@ const App = () => {
         setCatUrl(fullUrl);
       })
       .catch(err => console.error('고양이 이미지 로드 실패:', err));
-  }, [num, text]);  
+  }, [num, text]);
 
   React.useEffect(() => {
     jsonLocalStorage.setItem("num", num);
@@ -60,7 +59,7 @@ const App = () => {
   return (
     <div>
       <Title>{num}페이지</Title>
-      <AnimalForm IncrementNum={IncrementNum} setText={setText} /> 
+      <AnimalForm IncrementNum={IncrementNum} setText={setText} />
       <MainCard catUrl={catUrl} buttonHeart={buttonHeart} choiceFavorite={animalList.some(a => a.catUrl === catUrl)} />
       <Favorites animalList={animalList} />
     </div>
